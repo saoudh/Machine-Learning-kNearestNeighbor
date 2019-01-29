@@ -44,14 +44,21 @@ public class SimpleRun {
 		
 		// create classifier:
 		KENearestNeighbor classifier = new KENearestNeighbor();
-
+		System.out.println("data.class="+data.getClass().toString());
 		// build model:
 		classifier.buildClassifier(Filter.useFilter(data, filterTrain));
 
 		// classify test instances:
 		Instances testData = Filter.useFilter(data, filterTest);
 		for (Instance instance : testData) {
-			double result = classifier.classifyInstance(instance);
+			double result=0;
+			try{
+				 result = classifier.classifyInstance(instance);
+			}
+			catch(NullPointerException e)
+			{
+				System.out.println("its a nullpointer!");
+			}
 			String klasse = "" + result;
 			if (instance.classAttribute().isNominal())
 				klasse = instance.classAttribute().value((int) result);
