@@ -44,10 +44,10 @@ public class SimpleRun {
 		
 		// create classifier:
 		KENearestNeighbor classifier = new KENearestNeighbor();
-		System.out.println("data.class="+data.getClass().toString());
 		// build model:
 		classifier.buildClassifier(Filter.useFilter(data, filterTrain));
-
+		// setting number of K
+		classifier.setkNearest(4);
 		// classify test instances:
 		Instances testData = Filter.useFilter(data, filterTest);
 		for (Instance instance : testData) {

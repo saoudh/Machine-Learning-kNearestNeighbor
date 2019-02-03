@@ -126,7 +126,15 @@ public abstract class AbstractNearestNeighbor implements Serializable {
 	 * @return
 	 */
 	public Object classifyInstance(List<Object> testdata, int classAttributeIndex) {
+		/* 
+		 * returns a list of pairs of an instance (=list of attribute-objects) and their distance as double
+		which are nearest to the passed instance "testdata"  
+		*/
 		List<Pair<List<Object>, Double>> subset = getKNearest(testdata);
+
+		/*
+		 * apply voting on the nearest neighbors and return the winner-class as double
+		 */
 		Object classValue = vote(subset);
 		return classValue;
 	}

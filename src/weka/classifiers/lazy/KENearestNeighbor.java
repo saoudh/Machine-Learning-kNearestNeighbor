@@ -59,7 +59,6 @@ public class KENearestNeighbor extends AbstractClassifier implements OptionHandl
 	public double classifyInstance(Instance instance) {
 		int classAttribute = instance.classAttribute().index();
 		Object classValue = classifier.classifyInstance(convert(instance), classAttribute);
-		System.out.println("classifyInstance="+instance.toString()+"-classAtribute="+classAttribute+" - classValue="+classValue);
 		return instance.classAttribute().indexOfValue(classValue.toString());
 	}
 
