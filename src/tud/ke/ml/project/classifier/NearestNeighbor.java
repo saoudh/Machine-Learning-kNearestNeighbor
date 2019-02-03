@@ -137,13 +137,30 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 		}
 		return distance;
 	}
-
 	@Override
 	protected double determineEuclideanDistance(List<Object> instance1, List<Object> instance2) {
 		
+		double distance = 0.0;
+		// excluding the class-attribute
+		for (int i = 0; i < getClassAttributeIndex() - 1; i++) {
 
-		return 0.00;
-	}
+			// attribute i
+			Object attrOfInstance1 = instance1.get(i);
+			Object attrOfInstance2 = instance2.get(i);
+			// if attribute i of instance 1 equals that of instance 2 than distance is 0
+			// else calculate the euclidean Distance between this points
+			if (attrOfInstance1.toString().equals(attrOfInstance2.toString()))
+				distance += 0;
+			else {
+				double a1 = new Double(attrOfInstance1.toString());
+				double a2 = new Double(attrOfInstance2.toString());
+				distance += Math.sqrt((a1)*(a1) +(a2)*(a2));
+				
+			}
+			}
+		return distance;
+
+		}
 
 	@Override
 	protected double[][] normalizationScaling() {
