@@ -25,7 +25,9 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 
 	@Override
 	public String getMatrikelNumbers() {
-		return "TODO: matriculationnumber";
+		String  matriculationnumber = "2912264,2002954";
+		System.out.println(matriculationnumber);
+		return matriculationnumber;
 	}
 
 	@Override
@@ -36,20 +38,29 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 	@Override
 	protected Object vote(List<Pair<List<Object>, Double>> subset) {
 		// every class with it's distance as double, e.g. "yes"=2.4, "no"=4.5
-		Map<Object, Double> votes = getUnweightedVotes(subset);
-
-		return getWinner(votes);
+		
+		// create the boolean object inverse that determines which votes are calculated
+		boolean inverse = isInverseWeighting();
+		
+		if(inverse == false){
+			Map<Object, Double> votes = getUnweightedVotes(subset);
+			return getWinner(votes);
+		}
+		else {
+			Map<Object, Double> votes = getWeightedVotes(subset);
+			return getWinner(votes);
+		}	
 	}
 
 	@Override
 	protected Map<Object, Double> getUnweightedVotes(List<Pair<List<Object>, Double>> subset) {
 		Map<Object, Double> myClasses = new HashMap<Object, Double>();
-//return classes with their number of votes?
+		//return classes with their number of votes?
 		for (Pair pair : subset) {
 			List<String> listOfAttributes = (List<String>) (pair.getA());
 
 			// key=classname, value number of samples with same key
-			if (myClasses.containsKey(pair.getA()))
+			if (myClasses.containsKey(pair.getA())) 
 				myClasses.put(listOfAttributes.get(listOfAttributes.size() - 1),
 						(double) myClasses.get(pair.getA()) + 1);
 			else {
@@ -62,6 +73,7 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 
 	@Override
 	protected Map<Object, Double> getWeightedVotes(List<Pair<List<Object>, Double>> subset) {
+		
 
 		return null;
 	}
@@ -80,27 +92,33 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 		// returned
 		List<Pair<List<Object>, Double>> listOfInstanceDistancePairs = new ArrayList<Pair<List<Object>, Double>>();
 
+		
+		int metric = getMetric();
 		// loop over all instances in the training data and determine the distance to
 		// the passed instance
 		for (List<Object> instance2 : this.data) {
+			if (metric == 0) {
 			double distance = determineManhattanDistance(testData, instance2);
 			listOfInstanceDistancePairs.add(new Pair(instance2, distance));
+		} else {
+			double distance = determineEuclideanDistance(testData, instance2);
+			listOfInstanceDistancePairs.add(new Pair(instance2, distance));
+		} }
+
+			// return only k instances: sort by lowest distance and return k elements
+			Collections.sort(listOfInstanceDistancePairs, new Comparator<Pair>() {
+				@Override
+				public int compare(Pair left, Pair right) {
+					return Double.compare((double) left.getB(), (double) right.getB());
+				}
+			});
+
+			/*
+			 * return list of k pairs of the instances in the training data with their
+			 * distance to the passed instance
+			 */
+			return listOfInstanceDistancePairs.subList(0, getK());
 		}
-
-		// return only k instances: sort by lowest distance and return k elements
-		Collections.sort(listOfInstanceDistancePairs, new Comparator<Pair>() {
-			@Override
-			public int compare(Pair left, Pair right) {
-				return Double.compare((double) left.getB(), (double) right.getB());
-			}
-		});
-
-		/*
-		 * return list of k pairs of the instances in the training data with their
-		 * distance to the passed instance
-		 */
-		return listOfInstanceDistancePairs.subList(0, getK());
-	}
 
 	@Override
 	protected double determineManhattanDistance(List<Object> instance1, List<Object> instance2) {
@@ -122,6 +140,7 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 
 	@Override
 	protected double determineEuclideanDistance(List<Object> instance1, List<Object> instance2) {
+		
 
 		return 0.00;
 	}
