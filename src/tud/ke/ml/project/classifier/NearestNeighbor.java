@@ -58,13 +58,17 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 		// return classes with their number of votes?
 		for (Pair pair : subset) {
 			List<String> listOfAttributes = (List<String>) (pair.getA());
-
+			int indexOfClass=listOfAttributes.size() - 1;
+	
 			// key=classname, value number of samples with same key
-			if (myClasses.containsKey(pair.getA()))
-				myClasses.put(listOfAttributes.get(listOfAttributes.size() - 1),
+			if (myClasses.containsKey(listOfAttributes.get(indexOfClass).toString()))
+			{
+				myClasses.put(listOfAttributes.get(indexOfClass),
 						(double) myClasses.get(pair.getA()) + 1);
+			}
 			else {
-				myClasses.put(listOfAttributes.get(listOfAttributes.size() - 1), 1.0);
+
+				myClasses.put(listOfAttributes.get(indexOfClass).toString(), 1.0);
 
 			}
 		}
@@ -78,18 +82,18 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 		// return classes with their number of votes?
 		for (Pair pair : subset) {
 			List<String> listOfAttributes = (List<String>) (pair.getA());
+			int indexOfClass=listOfAttributes.size() - 1;
 
 			// key=classname, value number of samples with same key
-			if (myClasses.containsKey(pair.getA())) {
+			if (myClasses.containsKey(listOfAttributes.get(indexOfClass))) {
 				// multiply with the weight which is saved in the pair
-				System.out.println(
-						"getweighted-classname=" + pair.getA().toString() + "-weight=" + pair.getB().toString());
-				myClasses.put(listOfAttributes.get(listOfAttributes.size() - 1),
-						(double) myClasses.get(pair.getA()) + 1 * ((double) pair.getB()));
+				myClasses.put(listOfAttributes.get(indexOfClass),
+						(double) myClasses.get(listOfAttributes.get(indexOfClass)) + 1 * ((double) pair.getB()));
 			} else {
 				myClasses.put(listOfAttributes.get(listOfAttributes.size() - 1), 1.0 * ((double) pair.getB()));
 
 			}
+
 		}
 		return myClasses;
 	}
@@ -140,7 +144,7 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 	protected double determineManhattanDistance(List<Object> instance1, List<Object> instance2) {
 		double distance = 0.0;
 		// excluding the class-attribute
-		for (int i = 0; i < getClassAttributeIndex() - 1; i++) {
+		for (int i = 0; i < getClassAttributeIndex() ; i++) {
 
 			// attribute i
 			Object attrOfInstance1 = instance1.get(i);
@@ -170,7 +174,7 @@ public class NearestNeighbor extends AbstractNearestNeighbor implements Serializ
 
 		double distance = 0.0;
 		// excluding the class-attribute
-		for (int i = 0; i < getClassAttributeIndex() - 1; i++) {
+		for (int i = 0; i < getClassAttributeIndex() ; i++) {
 
 			// attribute i
 			Object attrOfInstance1 = instance1.get(i);

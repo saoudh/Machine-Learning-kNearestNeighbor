@@ -77,6 +77,8 @@ public class SimpleValidation {
 	@Test
 	public void testClassify() throws Exception {
 		keClassifier.setkNearest(2);
+		keClassifier.setMetric(new SelectedTag(1, KENearestNeighbor.TAGS_DISTANCE));
+		keClassifier.setDistanceWeighting(new SelectedTag(1, KENearestNeighbor.TAGS_WEIGHTING));
 
 		for (Instances instances : data) {
 			filterTrain.setInputFormat(instances);
